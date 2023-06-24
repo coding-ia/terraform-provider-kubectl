@@ -38,8 +38,7 @@ TIMER_START=$SECONDS
 COMMAND_RESULT=""
 limit=$(( ${TIMEOUT} / ${INTERVAL} ))
 count=0
-sleep 10
-docker ps
+kubectl get nodes --no-headers -oname
 while : ; do
   printf "."
 
