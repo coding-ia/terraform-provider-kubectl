@@ -1,11 +1,7 @@
-provider "kubectl" {
-  apply_retry_count = 5
-}
-
 resource "kubectl_manifest" "test" {
   depends_on = ["kubectl_manifest.definecrd"]
 
-    yaml_body = <<YAML
+  yaml_body = <<YAML
 apiVersion: couchbase.com/v1
 kind: CouchbaseCluster
 metadata:
@@ -64,7 +60,7 @@ spec:
 
 
 resource "kubectl_manifest" "definecrd" {
-    yaml_body = <<YAML
+  yaml_body = <<YAML
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:

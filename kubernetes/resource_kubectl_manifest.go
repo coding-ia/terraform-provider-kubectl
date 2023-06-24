@@ -4,11 +4,12 @@ import (
 	"context"
 	"crypto/sha256"
 	"fmt"
-	"github.com/gavinbunney/terraform-provider-kubectl/flatten"
-	"github.com/gavinbunney/terraform-provider-kubectl/yaml"
+	"github.com/coding-ia/terraform-provider-kubectl/flatten"
+	"github.com/coding-ia/terraform-provider-kubectl/yaml"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"io/ioutil"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/cli-runtime/pkg/printers"
 	"k8s.io/kubectl/pkg/validation"
 	"os"
@@ -466,11 +467,25 @@ func resourceKubectlManifestApply(ctx context.Context, d *schema.ResourceData, m
 	_, _ = tmpfile.Write([]byte(yamlBody))
 	_ = tmpfile.Close()
 
-	applyOptions := apply.NewApplyOptions(genericclioptions.IOStreams{
+	flags := apply.NewApplyFlags(nil, genericclioptions.IOStreams{
 		In:     strings.NewReader(yamlBody),
 		Out:    log.Writer(),
 		ErrOut: log.Writer(),
 	})
+
+	applyOptions := &apply.ApplyOptions{
+		PrintFlags:        flags.PrintFlags,
+		IOStreams:         flags.IOStreams,
+		Prune:             flags.Prune,
+		PruneResources:    flags.PruneResources,
+		All:               flags.All,
+		Overwrite:         flags.Overwrite,
+		OpenAPIPatch:      flags.OpenAPIPatch,
+		Recorder:          genericclioptions.NoopRecorder{},
+		VisitedUids:       sets.NewString(),
+		VisitedNamespaces: sets.NewString(),
+	}
+
 	applyOptions.Builder = k8sresource.NewBuilder(k8sresource.RESTClientGetter(meta.(*KubeProvider)))
 	applyOptions.DeleteOptions = &k8sdelete.DeleteOptions{
 		FilenameOptions: k8sresource.FilenameOptions{

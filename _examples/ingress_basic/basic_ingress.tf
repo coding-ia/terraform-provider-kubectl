@@ -1,7 +1,5 @@
-provider "kubectl" {}
-
 resource "kubectl_manifest" "test" {
-    yaml_body = <<YAML
+  yaml_body = <<YAML
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
