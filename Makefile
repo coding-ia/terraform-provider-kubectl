@@ -51,13 +51,10 @@ errcheck:
 	@sh -c "'$(CURDIR)/scripts/errcheck.sh'"
 
 ci-build-setup:
-	sudo rm /usr/local/bin/docker-compose
-	curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` > docker-compose
-	chmod +x docker-compose
-	sudo mv docker-compose /usr/local/bin
+	curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 	curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.20.7/bin/linux/amd64/kubectl
 	chmod +x kubectl
 	sudo mv kubectl /usr/local/bin/
 	bash scripts/gogetcookie.sh
 
-.PHONY: build dist test testacc k3s-start k3s-stop publish vet fmt fmtcheck errcheck ci-build-setup
+.PHONY: build dist k3s-start test testacc k3s-stop publish vet fmt fmtcheck errcheck ci-build-setup
