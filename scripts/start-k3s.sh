@@ -38,7 +38,8 @@ TIMER_START=$SECONDS
 COMMAND_RESULT=""
 limit=$(( ${TIMEOUT} / ${INTERVAL} ))
 count=0
-kubectl get nodes --kubeconfig ${KUBECONFIG} -o json
+sleep 10
+docker ps
 while : ; do
   printf "."
 
