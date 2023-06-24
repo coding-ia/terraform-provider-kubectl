@@ -1,7 +1,5 @@
-provider "kubectl" {}
-
 resource "kubectl_manifest" "test" {
-    yaml_body = <<YAML
+  yaml_body = <<YAML
 apiVersion: v1
 kind: Service
 metadata:
