@@ -44,6 +44,8 @@ while : ; do
   COMMAND_RESULT=$((kubectl get nodes --kubeconfig ${KUBECONFIG} -o json 2>/dev/null || true) | jq '.items | length')
   [[ "${COMMAND_RESULT}" -gt 0 ]] && printf "\n" && break
 
+  printf "${COMMAND_RESULT}"
+
   if [[ "${count}" -ge "${limit}" ]]; then
     printf "\n[!] Timeout waiting for connection\n" >&2
     exit 1
