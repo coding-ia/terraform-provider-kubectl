@@ -38,7 +38,7 @@ TIMER_START=$SECONDS
 COMMAND_RESULT=""
 limit=$(( ${TIMEOUT} / ${INTERVAL} ))
 count=0
-kubectl get nodes --no-headers -oname
+nc -zv 127.0.0.1 6443
 while : ; do
   printf "."
 
