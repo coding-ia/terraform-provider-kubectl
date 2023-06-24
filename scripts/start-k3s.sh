@@ -38,13 +38,12 @@ TIMER_START=$SECONDS
 COMMAND_RESULT=""
 limit=$(( ${TIMEOUT} / ${INTERVAL} ))
 count=0
+kubectl get nodes --kubeconfig ${KUBECONFIG} -o json
 while : ; do
   printf "."
 
   COMMAND_RESULT=$((kubectl get nodes --kubeconfig ${KUBECONFIG} -o json 2>/dev/null || true) | jq '.items | length')
   [[ "${COMMAND_RESULT}" -gt 0 ]] && printf "\n" && break
-
-  printf "${COMMAND_RESULT}"
 
   if [[ "${count}" -ge "${limit}" ]]; then
     printf "\n[!] Timeout waiting for connection\n" >&2
